@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 #  readPL4.py
@@ -22,42 +22,32 @@
 #  
 #  
 
-import sys
 from lib_readPL4 import readPL4
 from lib_readPL4 import convertType
 from lib_readPL4 import getVarData
 import numpy as np
 
-def main(args):
-	
-	# Call the library
-	dfHEAD,data,miscData = readPL4(sys.argv[1])
-	
-	# Give some information to the user
-	print "PL4 Header info:"
-	print miscData
-	
-	print "Data shape:"
-	print np.shape(data)
-	
-	# Convert the header type
-	convertType(dfHEAD)
-	
-	# EXAMPLES
-	###############################################################
-	# Get time
-	time = data[:,0]
-	
-	# Get some variable, remember ATP's variable has a maximum of 6 characters
-	# Check for var types in github wiki
-	# ~ sel_data = getVarData(dfHEAD,data,'TYPE','FROM','TO')
-	
-	# Launch ipython session
-	import IPython as ipy
-	ipy.embed()
-	
-	return 0
 
-if __name__ == '__main__':
-	import sys
-	sys.exit(main(sys.argv))
+# Call the library
+dfHEAD,data,miscData = readPL4('ex.pl4')
+    	
+# Give some information to the user
+print("PL4 Header info: {}".format(miscData))
+print("Data shape: {}".format(np.shape(data)))
+    	
+# Convert the header type
+convertType(dfHEAD)
+    	
+# EXAMPLES
+###############################################################
+# Get time
+time = data[:,0]
+    	
+# Get some variable, remember ATP's variable has a maximum of 6 characters
+# Check for var types in github wiki
+sel_data = getVarData(dfHEAD,data,1)    	
+# Launch ipython session
+#import IPython as ipy
+#ipy.embed()
+	
+

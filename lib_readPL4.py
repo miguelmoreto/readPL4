@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 #  lib_readPL4.py
@@ -61,7 +61,7 @@ def readPL4(pl4file):
 		dfHEAD['FROM'] = ''
 		dfHEAD['TO'] = ''
 		
-		for i in xrange(0,miscData['nvar']):
+		for i in range(0,int(miscData['nvar'])):
 			pos = 5*16 + i*16
 			h = struct.unpack('3x1c6s6s',pl4[pos:pos+16])
 			dfHEAD = dfHEAD.append({'TYPE': int(h[0]),\
@@ -69,7 +69,7 @@ def readPL4(pl4file):
 			                        'TO': h[2]}, ignore_index=True)
 		
 		# read and store actual data, map it to a numpy read only array
-		data = np.memmap(f,dtype=np.float32,mode='r',shape=(miscData['steps'],miscData['nvar']+1),offset=5*16 + miscData['nvar']*16)
+		data = np.memmap(f,dtype=np.float32,mode='r',shape=(int(miscData['steps']),int(miscData['nvar'])+1),offset=5*16 + int(miscData['nvar'])*16)
 			
 		return dfHEAD,data,miscData
 
@@ -81,9 +81,17 @@ def convertType(df):
 	df['TYPE'] = df['TYPE'].apply(lambda x: 'I-bran' if x == 9 else x)
 	
 	return 0
+
+# Get desired variable data
+def getVarData(dfHEAD,data,index):
+	
+				
+	data_sel = data[:,index] # One column shift given time vector
+
+	return(data_sel)
 	
 # Get desired variable data
-def getVarData(dfHEAD,data,Type,From,To):
+def getVarData2(dfHEAD,data,Type,From,To):
 	
 	# Search for desired data in header
 	df = dfHEAD[(dfHEAD['TYPE'] == Type) & (dfHEAD['FROM'] == From) & (dfHEAD['TO'] == To)]
@@ -92,7 +100,7 @@ def getVarData(dfHEAD,data,Type,From,To):
 		data_sel = data[:,df.index.values[0]+1] # One column shift given time vector
 		
 	else:
-		print "Variable %s-%s of %s not found!"%(From,To,Type) 
+		print("Variable {}-{} of {} not found!".format(From,To,Type)) 
 		return(None)
 
 	return(data_sel)
