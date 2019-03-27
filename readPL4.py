@@ -26,10 +26,10 @@ from lib_readPL4 import readPL4
 from lib_readPL4 import convertType
 from lib_readPL4 import getVarData
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 # Call the library
-dfHEAD,data,miscData = readPL4('ex.pl4')
+dfHEAD,data,miscData = readPL4('simulacao.pl4')
     	
 # Give some information to the user
 print("PL4 Header info: {}".format(miscData))
@@ -41,7 +41,7 @@ convertType(dfHEAD)
 # EXAMPLES
 ###############################################################
 # Get time
-time = data[:,0]
+time = data[:,-1]
     	
 # Get some variable, remember ATP's variable has a maximum of 6 characters
 # Check for var types in github wiki
@@ -50,4 +50,4 @@ sel_data = getVarData(dfHEAD,data,1)
 #import IPython as ipy
 #ipy.embed()
 	
-
+plt.plot(time,sel_data)
